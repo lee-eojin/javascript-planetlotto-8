@@ -1,5 +1,6 @@
 import { MissionUtils } from "@woowacourse/mission-utils";
 
+
 const InputView = {
   /**
    * @returns {number}
@@ -51,7 +52,7 @@ const OutputView = {
   printPurchasedLottos(lottos) {
     const lines = [
       `${lottos.length}개를 구매했습니다.`,
-        ...lottos.map(lotto => `[${lotto.join(', ')}]`),
+        // ...lottos.map(lotto => `[${lotto.join(', ')}]`),
     ];
     MissionUtils.Console.print(lines.join('\n'));
   },
