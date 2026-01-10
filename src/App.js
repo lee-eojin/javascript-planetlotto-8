@@ -5,22 +5,22 @@ import { LOTTO_CONFIG, ERROR_MESSAGE } from "./constants.js";
 
 class App {
   async run() {
-    
     const amount = await this.#askAmount();
     const lottoLists = this.#generateLottos(amount);
     OutputView.printPurchasedLottos(lottoLists.length);
     lottoLists.forEach((lotto) => OutputView.printLottos(lotto.numberCheck()));
 
-    
     const winningNumbers = await this.#askWinningLotto();
     const bonusNumber = await this.#askBonusNumber(winningNumbers);
 
-    
-    const result = this.#resultCalculate(lottoLists, winningNumbers, bonusNumber);
+    const result = this.#resultCalculate(
+      lottoLists,
+      winningNumbers,
+      bonusNumber
+    );
     OutputView.printResult(result);
   }
 
-  
   async #askAmount() {
     try {
       const input = await InputView.askAmount();
@@ -33,7 +33,6 @@ class App {
     }
   }
 
-  
   #validateAmount(amount) {
     if (Number.isNaN(amount)) {
       throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
@@ -46,7 +45,6 @@ class App {
     }
   }
 
-  
   async #askWinningLotto() {
     try {
       const input = await InputView.askWinningLotto();
@@ -59,13 +57,14 @@ class App {
     }
   }
 
-  
   #winningNumbersValidate(numbers) {
     if (numbers.some(Number.isNaN)) {
       throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
-      throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`);
+      throw new Error(
+        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`
+      );
     }
     if (new Set(numbers).size !== numbers.length) {
       throw new Error(ERROR_MESSAGE.DUPLICATE_TARGET_NUMBER);
@@ -74,7 +73,9 @@ class App {
       (num) => num >= LOTTO_CONFIG.MIN_NUMBER && num <= LOTTO_CONFIG.MAX_NUMBER
     );
     if (!범위확인) {
-      throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`);
+      throw new Error(
+        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+      );
     }
   }
 
@@ -95,7 +96,9 @@ class App {
       throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (number < LOTTO_CONFIG.MIN_NUMBER || number > LOTTO_CONFIG.MAX_NUMBER) {
-      throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`);
+      throw new Error(
+        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+      );
     }
     if (winningNumbers.includes(number)) {
       throw new Error(ERROR_MESSAGE.DUPLICATE_BONUS_NUMBER);
@@ -129,7 +132,12 @@ class App {
 
   #resultCalculate(lottoLists, winningNumbers, bonusNumber) {
     const result = new Map([
-      [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0]
+      [0, 0],
+      [1, 0],
+      [2, 0],
+      [3, 0],
+      [4, 0],
+      [5, 0],
     ]);
 
     for (const lotto of lottoLists) {

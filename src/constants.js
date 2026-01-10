@@ -1,8 +1,8 @@
 export const LOTTO_CONFIG = Object.freeze({
-  PRICE: 500,         
-  NUMBER_COUNT: 5,    
-  MIN_NUMBER: 1,      
-  MAX_NUMBER: 30,     
+  PRICE: 500,
+  NUMBER_COUNT: 5,
+  MIN_NUMBER: 1,
+  MAX_NUMBER: 30,
 });
 
 export const MATCH_COUNT = Object.freeze({
@@ -10,7 +10,7 @@ export const MATCH_COUNT = Object.freeze({
   SECOND: 5,
   THIRD: 5,
   FOURTH: 4,
-  FIFTH: 3
+  FIFTH: 3,
 });
 
 export const PRIZE_MONEY = Object.freeze({
@@ -18,16 +18,17 @@ export const PRIZE_MONEY = Object.freeze({
   SECOND: 30000000,
   THIRD: 1500000,
   FOURTH: 50000,
-  FIFTH: 5000
+  FIFTH: 5000,
 });
 
-export const ERROR_MESSAGE = Object.freeze({  
-  INVALID_LOTTO_COUNT: '[ERROR] 로또 번호는 6개여야 합니다.',
-  DUPLICATE_LOTTO_NUMBER: '[ERROR] 로또 번호에 중복된 숫자가 있습니다.',
-  INVALID_NUMBER_FORMAT: '[ERROR] 로또 번호는 숫자여야 합니다.',
-  DUPLICATE_TARGET_NUMBER: '[ERROR] 당첨 번호에 중복된 숫자가 있습니다.',
-  INVALID_BONUS_FORMAT: '[ERROR] 보너스 번호는 숫자여야 합니다.',
-  DUPLICATE_BONUS_NUMBER: '[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.'
+export const ERROR_MESSAGE = Object.freeze({
+  INVALID_LOTTO_COUNT: "[ERROR] 로또 번호는 6개여야 합니다.",
+  DUPLICATE_LOTTO_NUMBER: "[ERROR] 로또 번호에 중복된 숫자가 있습니다.",
+  INVALID_NUMBER_FORMAT: "[ERROR] 로또 번호는 숫자여야 합니다.",
+  DUPLICATE_TARGET_NUMBER: "[ERROR] 당첨 번호에 중복된 숫자가 있습니다.",
+  INVALID_BONUS_FORMAT: "[ERROR] 보너스 번호는 숫자여야 합니다.",
+  DUPLICATE_BONUS_NUMBER:
+    "[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.",
 });
 
 export const LOTTERY_TYPES = Object.freeze({
@@ -36,7 +37,7 @@ export const LOTTERY_TYPES = Object.freeze({
   INSTANT: "INSTANT",
 });
 
-export const PLUS_ERROR_MESSAGE = Object.freeze({  
-  SHORTAGE: '[ERROR] 재고가 부족합니다.',
-  TYPE: '[ERROR] 알 수 없는 타입입니다.'
+export const PLUS_ERROR_MESSAGE = Object.freeze({
+  SHORTAGE: "[ERROR] 재고가 부족합니다.",
+  TYPE: "[ERROR] 알 수 없는 타입입니다.",
 });

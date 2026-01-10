@@ -5,9 +5,9 @@ import LottoLottery from "./LottoLottery.js";
 import PensionLottery from "./PensionLottery.js";
 
 class LotteryShop {
-  #lotteryTypes; 
+  #lotteryTypes;
   #purchaseHistory;
-  #salesStats; 
+  #salesStats;
   constructor(csvPath) {
     this.#lotteryTypes = this.#readCSV(csvPath);
     this.#purchaseHistory = {};
