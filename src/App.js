@@ -1,110 +1,110 @@
-import { Random, Console } from "@woowacourse/mission-utils";
+import { Random } from "@woowacourse/mission-utils";
 import { InputView, OutputView } from "./view.js";
 import Lotto from "./Lotto.js";
-import { LOTTO_CONFIG, PRIZE_MONEY } from "./constants.js";
+import { LOTTO_CONFIG } from "./constants.js";
 
 class App {
   async run() {
-    const inputView = InputView;
-    const outputView = OutputView;
+    
+    const amount = await this.#askAmount();
+    const lottoLists = this.#generateLottos(amount);
+    OutputView.printPurchasedLottos(lottoLists.length);
+    lottoLists.forEach((lotto) => OutputView.printLottos(lotto.numberCheck()));
 
-    const price = await inputView.askAmount(inputView);
-    const lottos = this.#generateLottos(price);
+    
+    const winningNumbers = await this.#askWinningLotto();
+    const bonusNumber = await this.#askBonusNumber(winningNumbers);
 
-    // outputView.printPurchasedLottos(lottos);
-    // outputView.printLottos(lottos);
-
-    const winningNumbers = await inputView.askWinningLotto(inputView);
-    const bonusNumber = await inputView.askBonusNumber(inputView, winningNumbers);
-
-    const result = this.#calculateResult(lottos, winningNumbers, bonusNumber);
-    const earningRate = this.#calculateEarningRate(result, price);
-
-    outputView.printResult(result);
-    outputView.printEarningRate(earningRate);
+    
+    const result = this.#resultCalculate(lottoLists, winningNumbers, bonusNumber);
+    OutputView.printResult(result);
   }
 
-  async askAmount(inputView) {
+  
+  async #askAmount() {
     try {
-      const price = await inputView.readPrice();
-      this.#validatePrice(price);
-      return price;
+      const input = await InputView.askAmount();
+      const amount = Number(input);
+      this.#validateAmount(amount);
+      return amount;
     } catch (error) {
-      Console.print(error.message);
-      return this.askAmount(inputView);
+      OutputView.printErrorMessage(error.message);
+      return this.#askAmount();
     }
   }
 
-  async askWinningLotto(inputView) {
-    try {
-      const winningNumbers = await inputView.readWinningNumbers();
-      this.#validateWinningNumbers(winningNumbers);
-      return winningNumbers;
-    } catch (error) {
-      Console.print(error.message);
-      return this.askWinningLotto(inputView);
-    }
-  }
-
-  async askMonusNumber(inputView, winningNumbers) {
-    try {
-      const bonusNumber = await inputView.readBonusNumber();
-      this.#validateBonusNumber(bonusNumber, winningNumbers);
-      return bonusNumber;
-    } catch (error) {
-      Console.print(error.message);
-      return this.askMonusNumber(inputView, winningNumbers);
-    }
-  }
-
-  #validatePrice(price) {
-    if (Number.isNaN(price)) {
+  
+  #validateAmount(amount) {
+    if (Number.isNaN(amount)) {
       throw new Error("[ERROR] 숫자를 입력해주세요.");
     }
-
-    if (price < LOTTO_CONFIG.PRICE) {
-      throw new Error("[ERROR] 1000원 이상 입력해주세요.");
+    if (amount < LOTTO_CONFIG.PRICE) {
+      throw new Error(`[ERROR] ${LOTTO_CONFIG.PRICE}원 이상 입력해주세요.`);
     }
-
-    if (price % LOTTO_CONFIG.PRICE !== 0) {
-      throw new Error("[ERROR] 1000원 단위로 입력해주세요.");
+    if (amount % LOTTO_CONFIG.PRICE !== 0) {
+      throw new Error(`[ERROR] ${LOTTO_CONFIG.PRICE}원 단위로 입력해주세요.`);
     }
   }
 
-  #validateWinningNumbers(numbers) {
-    if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
-      throw new Error("[ERROR] 로또 번호는 5개여야 합니다.");
+  
+  async #askWinningLotto() {
+    try {
+      const input = await InputView.askWinningLotto();
+      const numbers = input.replaceAll(" ", "").split(",").map(Number);
+      this.#winningNumbersValidate(numbers);
+      return numbers;
+    } catch (error) {
+      OutputView.printErrorMessage(error.message);
+      return this.#askWinningLotto();
     }
+  }
 
+  
+  #winningNumbersValidate(numbers) {
+    if (numbers.some(Number.isNaN)) {
+      throw new Error("[ERROR] 당첨 번호는 숫자여야 합니다.");
+    }
+    if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
+      throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`);
+    }
     if (new Set(numbers).size !== numbers.length) {
       throw new Error("[ERROR] 로또 번호는 중복될 수 없습니다.");
     }
-
-    const isInRange = numbers.every(
+    const 범위확인 = numbers.every(
       (num) => num >= LOTTO_CONFIG.MIN_NUMBER && num <= LOTTO_CONFIG.MAX_NUMBER
     );
-    if (!isInRange) {
-      throw new Error("[ERROR] 로또 번호는 1부터 30 사이의 숫자여야 합니다.");
+    if (!범위확인) {
+      throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`);
     }
   }
 
-  #validateBonusNumber(bonusNumber, winningNumbers) {
-    if (Number.isNaN(bonusNumber)) {
+  async #askBonusNumber(winningNumbers) {
+    try {
+      const input = await InputView.askBonusNumber();
+      const number = Number(input);
+      this.#bonusNumberValidate(number, winningNumbers);
+      return number;
+    } catch (error) {
+      OutputView.printErrorMessage(error.message);
+      return this.#askBonusNumber(winningNumbers);
+    }
+  }
+
+  #bonusNumberValidate(number, winningNumbers) {
+    if (Number.isNaN(number)) {
       throw new Error("[ERROR] 숫자를 입력해주세요.");
     }
-
-    if (bonusNumber < LOTTO_CONFIG.MIN_NUMBER || bonusNumber > LOTTO_CONFIG.MAX_NUMBER) {
-      throw new Error("[ERROR] 로또 번호는 1부터 30 사이의 숫자여야 합니다.");
+    if (number < LOTTO_CONFIG.MIN_NUMBER || number > LOTTO_CONFIG.MAX_NUMBER) {
+      throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`);
     }
-
-    if (winningNumbers.includes(bonusNumber)) {
+    if (winningNumbers.includes(number)) {
       throw new Error("[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.");
     }
   }
-
-  #generateLottos(price) {
-    const count = price / LOTTO_CONFIG.PRICE;
-    const lottos = [];
+  
+  #generateLottos(amount) {
+    const count = amount / LOTTO_CONFIG.PRICE;
+    const lottoLists = [];
 
     for (let i = 0; i < count; i++) {
       const numbers = Random.pickUniqueNumbersInRange(
@@ -112,45 +112,34 @@ class App {
         LOTTO_CONFIG.MAX_NUMBER,
         LOTTO_CONFIG.NUMBER_COUNT
       );
-      lottos.push(new Lotto(numbers));
+      lottoLists.push(new Lotto(numbers));
     }
 
-    return lottos;
+    return lottoLists;
   }
 
-  #getRank(matchCount, hasBonus) {
-    if (matchCount === 5) return 5;
-    if (matchCount === 4 && hasBonus) return "4+bonus";
-    if (matchCount === 4) return 4;
-    if (matchCount === 3) return 3;
-    if (matchCount === 2) return 2;
-    return null;
+  #rankCalculate(matchCount, hasBonus) {
+    if (matchCount === 5) return 1;
+    if (matchCount === 4 && hasBonus) return 2;
+    if (matchCount === 4) return 3;
+    if (matchCount === 3 && hasBonus) return 4;
+    if (matchCount === 2 && hasBonus) return 5;
+    return 0;
   }
 
-  #calculateResult(lottos, winningNumbers, bonusNumber) {
-    const result = { 2: 0, 3: 0, 4: 0, "4+bonus": 0, 5: 0 };
+  #resultCalculate(lottoLists, winningNumbers, bonusNumber) {
+    const result = new Map([
+      [0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0]
+    ]);
 
-    for (const lotto of lottos) {
-      const matchCount = lotto.getMatchCount(winningNumbers);
-      const hasBonus = lotto.hasBonusNumber(bonusNumber);
-      const rank = this.#getRank(matchCount, hasBonus);
-
-      if (rank) {
-        result[rank] += 1;
-      }
+    for (const lotto of lottoLists) {
+      const matchCount = lotto.matchCount(winningNumbers);
+      const hasBonus = lotto.hasBonus(bonusNumber);
+      const rank = this.#rankCalculate(matchCount, hasBonus);
+      result.set(rank, result.get(rank) + 1);
     }
 
     return result;
-  }
-
-  #calculateEarningRate(result, price) {
-    let totalPrize = 0;
-
-    for (const rank in result) {
-      totalPrize += result[rank] * PRIZE_MONEY[rank];
-    }
-
-    return ((totalPrize / price) * 100).toFixed(1);
   }
 }
 
