@@ -1,7 +1,7 @@
 import { Random } from "@woowacourse/mission-utils";
 import { InputView, OutputView } from "./view.js";
 import Lotto from "./Lotto.js";
-import { LOTTO_CONFIG } from "./constants.js";
+import { LOTTO_CONFIG, ERROR_MESSAGE } from "./constants.js";
 
 class App {
   async run() {
@@ -36,7 +36,7 @@ class App {
   
   #validateAmount(amount) {
     if (Number.isNaN(amount)) {
-      throw new Error("[ERROR] 숫자를 입력해주세요.");
+      throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (amount < LOTTO_CONFIG.PRICE) {
       throw new Error(`[ERROR] ${LOTTO_CONFIG.PRICE}원 이상 입력해주세요.`);
@@ -62,13 +62,13 @@ class App {
   
   #winningNumbersValidate(numbers) {
     if (numbers.some(Number.isNaN)) {
-      throw new Error("[ERROR] 당첨 번호는 숫자여야 합니다.");
+      throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
       throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`);
     }
     if (new Set(numbers).size !== numbers.length) {
-      throw new Error("[ERROR] 로또 번호는 중복될 수 없습니다.");
+      throw new Error(ERROR_MESSAGE.DUPLICATE_TARGET_NUMBER);
     }
     const 범위확인 = numbers.every(
       (num) => num >= LOTTO_CONFIG.MIN_NUMBER && num <= LOTTO_CONFIG.MAX_NUMBER
@@ -92,16 +92,16 @@ class App {
 
   #bonusNumberValidate(number, winningNumbers) {
     if (Number.isNaN(number)) {
-      throw new Error("[ERROR] 숫자를 입력해주세요.");
+      throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (number < LOTTO_CONFIG.MIN_NUMBER || number > LOTTO_CONFIG.MAX_NUMBER) {
       throw new Error(`[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`);
     }
     if (winningNumbers.includes(number)) {
-      throw new Error("[ERROR] 보너스 번호는 당첨 번호와 중복될 수 없습니다.");
+      throw new Error(ERROR_MESSAGE.DUPLICATE_BONUS_NUMBER);
     }
   }
-  
+
   #generateLottos(amount) {
     const count = amount / LOTTO_CONFIG.PRICE;
     const lottoLists = [];
