@@ -1,9 +1,8 @@
- import fs from "fs";
+import fs from "fs";
 import { Random } from "@woowacourse/mission-utils";
-import { LOTTERY_TYPES } from "./constants.js";
+import { LOTTERY_TYPES, PLUS_ERROR_MESSAGE } from "./constants.js";
 import LottoLottery from "./LottoLottery.js";
 import PensionLottery from "./PensionLottery.js";
-import InstantLottery from "./InstantLottery.js";
 
 class LotteryShop {
   #lotteryTypes; 
@@ -50,7 +49,7 @@ class LotteryShop {
     const count = amount / price;
 
     if (Number(info.stock) < count) {
-      throw new Error("[ERROR] 재고가 부족합니다.");
+      throw new Error(PLUS_ERROR_MESSAGE.SHORTAGE);
     }
 
     const lotteries = [];
@@ -70,7 +69,7 @@ class LotteryShop {
 
   #generateLottery(type) {
     if (type === LOTTERY_TYPES.LOTTO) {
-      const numbers = Random.pickUniqueNumbersInRange(1, 45, 6);
+      const numbers = Random.pickUniqueNumbersInRange(1, 30, 5);
       return new LottoLottery(numbers.sort((a, b) => a - b));
     }
 
@@ -79,12 +78,7 @@ class LotteryShop {
       return new PensionLottery(number);
     }
 
-    if (type === LOTTERY_TYPES.INSTANT) {
-      const numbers = Random.pickUniqueNumbersInRange(1, 100, 3);
-      return new InstantLottery(numbers.sort((a, b) => a - b));
-    }
-
-    throw new Error("[ERROR] 알 수 없는 복권 종류입니다.");
+    throw new Error(PLUS_ERROR_MESSAGE.TYPE);
   }
 
   getPurchasedLotteries(type) {

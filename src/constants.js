@@ -36,3 +36,7 @@ export const LOTTERY_TYPES = Object.freeze({
   INSTANT: "INSTANT",
 });
 
+export const PLUS_ERROR_MESSAGE = Object.freeze({  
+  SHORTAGE: '[ERROR] 재고가 부족합니다.',
+  TYPE: '[ERROR] 알 수 없는 타입입니다.'
+});
