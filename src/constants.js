@@ -67,4 +67,27 @@ export const PENSION_CONFIG = Object.freeze({
 export const PLUS_ERROR_MESSAGE = Object.freeze({
   SHORTAGE: "재고가 부족합니다.",
   TYPE: "알 수 없는 타입입니다.",
+  INVALID_INPUT: "잘못된 입력입니다. 다시 선택해주세요.",
+  INVALID_AMOUNT_UNIT: (price) => `${price}원 단위로 입력해주세요.`,
+  INVALID_AMOUNT_MIN: (price) => `${price}원 이상 입력해주세요.`,
+  INVALID_LOTTO_COUNT: (count) => `로또 번호는 ${count}개여야 합니다.`,
+  INVALID_NUMBER_RANGE: (min, max) =>
+    `로또 번호는 ${min}부터 ${max} 사이의 숫자여야 합니다.`,
+});
+
+export const PROMPT_MESSAGE = Object.freeze({
+  MODE_SELECT: "모드를 선택해주세요.\n1. 행성로또\n2. 복권판매점\n",
+  LOTTERY_TYPE_SELECT: "복권 종류를 선택해주세요.\n1. 행성로또\n2. 연금복권\n",
+  SHOP_AMOUNT_INPUT: (price) => `구입금액을 입력해 주세요. (${price}원 단위)\n`,
+});
+
+export const OUTPUT_MESSAGE = Object.freeze({
+  PURCHASE_COUNT: (count) => `${count}개를 구매했습니다.`,
+  STATS_HEADER: "당첨 통계",
+  STATS_DIVIDER: "---",
+  SALES_STATS_HEADER: "\n--- 판매 통계 ---",
+  RANK_RESULT: (rank, prize, count) =>
+    `${rank}등 (${prize.toLocaleString()}원) - ${count}개`,
+  SALES_STAT_LINE: (type, count, revenue) =>
+    `${type}: ${count}장, ${revenue.toLocaleString()}원`,
 });

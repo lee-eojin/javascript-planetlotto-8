@@ -10,6 +10,9 @@ import {
   LOTTERY_CHOICE,
   FILE_PATH,
   MATCH_COUNT,
+  PLUS_ERROR_MESSAGE,
+  PROMPT_MESSAGE,
+  OUTPUT_MESSAGE,
 } from "./constants.js";
 
 class App {
@@ -26,7 +29,7 @@ class App {
 
   async #askMode() {
     const input = await MissionUtils.Console.readLineAsync(
-      "모드를 선택해주세요.\n1. 행성로또\n2. 복권판매점\n"
+      PROMPT_MESSAGE.MODE_SELECT
     );
     return input;
   }
@@ -92,24 +95,24 @@ class App {
 
   async #askLotteryType() {
     const input = await MissionUtils.Console.readLineAsync(
-      "복권 종류를 선택해주세요.\n1. 행성로또\n2. 연금복권\n"
+      PROMPT_MESSAGE.LOTTERY_TYPE_SELECT
     );
 
     if (input === LOTTERY_CHOICE.LOTTO) return LOTTERY_TYPES.LOTTO;
     if (input === LOTTERY_CHOICE.PENSION) return LOTTERY_TYPES.PENSION;
 
-    MissionUtils.Console.print("잘못된 입력입니다. 다시 선택해주세요.");
+    MissionUtils.Console.print(PLUS_ERROR_MESSAGE.INVALID_INPUT);
     return this.#askLotteryType();
   }
 
   async #askShopAmount(price) {
     const input = await MissionUtils.Console.readLineAsync(
-      `구입금액을 입력해 주세요. (${price}원 단위)\n`
+      PROMPT_MESSAGE.SHOP_AMOUNT_INPUT(price)
     );
     const amount = parseInt(input, 10);
 
     if (Number.isNaN(amount) || amount < price || amount % price !== 0) {
-      MissionUtils.Console.print(`${price}원 단위로 입력해주세요.`);
+      MissionUtils.Console.print(PLUS_ERROR_MESSAGE.INVALID_AMOUNT_UNIT(price));
       return this.#askShopAmount(price);
     }
 
@@ -117,7 +120,7 @@ class App {
   }
 
   #printShopLotteries(lotteries) {
-    MissionUtils.Console.print(`${lotteries.length}개를 구매했습니다.`);
+    MissionUtils.Console.print(OUTPUT_MESSAGE.PURCHASE_COUNT(lotteries.length));
     lotteries.forEach((lottery) => {
       MissionUtils.Console.print(lottery.toString());
     });
@@ -131,26 +134,26 @@ class App {
       if (rank) rankCounts[rank]++;
     }
 
-    MissionUtils.Console.print("당첨 통계");
-    MissionUtils.Console.print("---");
+    MissionUtils.Console.print(OUTPUT_MESSAGE.STATS_HEADER);
+    MissionUtils.Console.print(OUTPUT_MESSAGE.STATS_DIVIDER);
     MissionUtils.Console.print(
-      `1등 (${Number(info.firstPrize).toLocaleString()}원) - ${rankCounts.FIRST}개`
+      OUTPUT_MESSAGE.RANK_RESULT(1, Number(info.firstPrize), rankCounts.FIRST)
     );
     MissionUtils.Console.print(
-      `2등 (${Number(info.secondPrize).toLocaleString()}원) - ${rankCounts.SECOND}개`
+      OUTPUT_MESSAGE.RANK_RESULT(2, Number(info.secondPrize), rankCounts.SECOND)
     );
     MissionUtils.Console.print(
-      `3등 (${Number(info.thirdPrize).toLocaleString()}원) - ${rankCounts.THIRD}개`
+      OUTPUT_MESSAGE.RANK_RESULT(3, Number(info.thirdPrize), rankCounts.THIRD)
     );
   }
 
   #printSalesStats(shop) {
     const stats = shop.getSalesStats();
-    MissionUtils.Console.print("\n--- 판매 통계 ---");
+    MissionUtils.Console.print(OUTPUT_MESSAGE.SALES_STATS_HEADER);
     Object.entries(stats).forEach(([type, data]) => {
       if (data.count > 0) {
         MissionUtils.Console.print(
-          `${type}: ${data.count}장, ${data.revenue.toLocaleString()}원`
+          OUTPUT_MESSAGE.SALES_STAT_LINE(type, data.count, data.revenue)
         );
       }
     });
@@ -172,10 +175,10 @@ class App {
       throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (amount < LOTTO_CONFIG.PRICE) {
-      throw new Error(`${LOTTO_CONFIG.PRICE}원 이상 입력해주세요.`);
+      throw new Error(PLUS_ERROR_MESSAGE.INVALID_AMOUNT_MIN(LOTTO_CONFIG.PRICE));
     }
     if (amount % LOTTO_CONFIG.PRICE !== 0) {
-      throw new Error(`${LOTTO_CONFIG.PRICE}원 단위로 입력해주세요.`);
+      throw new Error(PLUS_ERROR_MESSAGE.INVALID_AMOUNT_UNIT(LOTTO_CONFIG.PRICE));
     }
   }
 
@@ -196,18 +199,21 @@ class App {
     }
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
       throw new Error(
-        `로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`
+        PLUS_ERROR_MESSAGE.INVALID_LOTTO_COUNT(LOTTO_CONFIG.NUMBER_COUNT)
       );
     }
     if (new Set(numbers).size !== numbers.length) {
       throw new Error(ERROR_MESSAGE.DUPLICATE_TARGET_NUMBER);
     }
-    const 범위확인 = numbers.every(
+    const isValidRange = numbers.every(
       (num) => num >= LOTTO_CONFIG.MIN_NUMBER && num <= LOTTO_CONFIG.MAX_NUMBER
     );
-    if (!범위확인) {
+    if (!isValidRange) {
       throw new Error(
-        `로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+        PLUS_ERROR_MESSAGE.INVALID_NUMBER_RANGE(
+          LOTTO_CONFIG.MIN_NUMBER,
+          LOTTO_CONFIG.MAX_NUMBER
+        )
       );
     }
   }
@@ -229,7 +235,10 @@ class App {
     }
     if (number < LOTTO_CONFIG.MIN_NUMBER || number > LOTTO_CONFIG.MAX_NUMBER) {
       throw new Error(
-        `로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+        PLUS_ERROR_MESSAGE.INVALID_NUMBER_RANGE(
+          LOTTO_CONFIG.MIN_NUMBER,
+          LOTTO_CONFIG.MAX_NUMBER
+        )
       );
     }
     if (winningNumbers.includes(number)) {
