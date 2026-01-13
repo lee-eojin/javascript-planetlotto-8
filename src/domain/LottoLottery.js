@@ -1,5 +1,5 @@
 import Lottery from "./Lottery.js";
-import { LOTTERY_TYPES } from "./constants.js";
+import { LOTTERY_TYPES } from "../constants.js";
 
 class LottoLottery extends Lottery {
   constructor(numbers) {

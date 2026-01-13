@@ -1,4 +1,4 @@
-import { LOTTO_CONFIG } from "./constants.js";
+import { LOTTO_CONFIG } from "../constants.js";
 
 class Lotto {
   #numbers;

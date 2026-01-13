@@ -1,6 +1,6 @@
 import fs from "fs";
 import { Random } from "@woowacourse/mission-utils";
-import { LOTTERY_TYPES, PLUS_ERROR_MESSAGE } from "./constants.js";
+import { LOTTERY_TYPES, PLUS_ERROR_MESSAGE } from "../constants.js";
 import LottoLottery from "./LottoLottery.js";
 import PensionLottery from "./PensionLottery.js";
 

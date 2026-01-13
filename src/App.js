@@ -1,6 +1,6 @@
 import { Random } from "@woowacourse/mission-utils";
 import { InputView, OutputView } from "./view.js";
-import Lotto from "./Lotto.js";
+import Lotto from "./domain/Lotto.js";
 import { LOTTO_CONFIG, ERROR_MESSAGE } from "./constants.js";
 
 class App {
