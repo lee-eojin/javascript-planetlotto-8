@@ -25,8 +25,7 @@ class App {
 
   async #askAmount() {
     try {
-      const input = await InputView.askAmount();
-      const amount = Number(input);
+      const amount = await InputView.askAmount();
       this.#validateAmount(amount);
       return amount;
     } catch (error) {
@@ -82,10 +81,9 @@ class App {
 
   async #askBonusNumber(winningNumbers) {
     try {
-      const input = await InputView.askBonusNumber();
-      const number = Number(input);
-      this.#bonusNumberValidate(number, winningNumbers);
-      return number;
+      const bonusNumber = await InputView.askBonusNumber();
+      this.#bonusNumberValidate(bonusNumber, winningNumbers);
+      return bonusNumber;
     } catch (error) {
       OutputView.printErrorMessage(error.message);
       return this.#askBonusNumber(winningNumbers);

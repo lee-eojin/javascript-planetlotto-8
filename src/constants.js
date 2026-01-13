@@ -6,23 +6,23 @@ export const LOTTO_CONFIG = Object.freeze({
 });
 
 export const MATCH_COUNT = Object.freeze({
-  FIRST: 6,
-  SECOND: 5,
-  THIRD: 5,
-  FOURTH: 4,
-  FIFTH: 3,
+  FIRST: 5,
+  SECOND: 4,
+  THIRD: 4,
+  FOURTH: 3,
+  FIFTH: 2,
 });
 
 export const PRIZE_MONEY = Object.freeze({
-  FIRST: 2000000000,
-  SECOND: 30000000,
+  FIRST: 100000000,
+  SECOND: 10000000,
   THIRD: 1500000,
-  FOURTH: 50000,
+  FOURTH: 500000,
   FIFTH: 5000,
 });
 
 export const ERROR_MESSAGE = Object.freeze({
-  INVALID_LOTTO_COUNT: "로또 번호는 6개여야 합니다.",
+  INVALID_LOTTO_COUNT: "로또 번호는 5개여야 합니다.",
   DUPLICATE_LOTTO_NUMBER: "로또 번호에 중복된 숫자가 있습니다.",
   INVALID_NUMBER_FORMAT: "로또 번호는 숫자여야 합니다.",
   DUPLICATE_TARGET_NUMBER: "당첨 번호에 중복된 숫자가 있습니다.",

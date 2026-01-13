@@ -11,12 +11,12 @@ class Lotto {
   #validate(numbers) {
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
       throw new Error(
-        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`
+        `로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`
       );
     }
 
     if (new Set(numbers).size !== numbers.length) {
-      throw new Error("[ERROR] 로또 번호는 중복될 수 없습니다.");
+      throw new Error("로또 번호는 중복될 수 없습니다.");
     }
 
     const scopeCheck = numbers.every(
@@ -24,7 +24,7 @@ class Lotto {
     );
     if (!scopeCheck) {
       throw new Error(
-        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+        `로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
       );
     }
   }
