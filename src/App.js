@@ -1,11 +1,29 @@
-import { Random } from "@woowacourse/mission-utils";
+import { MissionUtils, Random } from "@woowacourse/mission-utils";
 import { InputView, OutputView } from "./view.js";
 import Lotto from "./domain/Lotto.js";
 import { LOTTO_CONFIG, ERROR_MESSAGE } from "./constants.js";
 
 class App {
   async run() {
-    const amount = await this.#askAmount();
+    const modeInput = await this.#askMode();
+
+    if (modeInput === "2") {
+      await this.#runShopMode();
+      return;
+    }
+
+    await this.#runDefaultMode(modeInput);
+  }
+
+  async #askMode() {
+    const input = await MissionUtils.Console.readLineAsync(
+      "모드를 선택해주세요.\n1. 행성로또\n2. 복권판매점\n"
+    );
+    return input;
+  }
+
+  async #runDefaultMode(modeInput) {
+    const amount = await this.#getAmountFromModeInput(modeInput);
     const lottoLists = this.#generateLottos(amount);
 
     OutputView.printPurchasedLottos(
@@ -21,6 +39,29 @@ class App {
       bonusNumber
     );
     OutputView.printResult(result);
+  }
+
+  async #getAmountFromModeInput(modeInput) {
+    if (modeInput === "1") {
+      return this.#askAmount();
+    }
+
+    const parsed = parseInt(modeInput, 10);
+    if (!Number.isNaN(parsed)) {
+      try {
+        this.#validateAmount(parsed);
+        return parsed;
+      } catch (error) {
+        OutputView.printErrorMessage(error.message);
+        return this.#askAmount();
+      }
+    }
+
+    return this.#askAmount();
+  }
+
+  async #runShopMode() {
+    MissionUtils.Console.print("복권판매점 모드는 준비 중입니다.");
   }
 
   async #askAmount() {
