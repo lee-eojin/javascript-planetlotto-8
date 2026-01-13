@@ -1,7 +1,8 @@
 import { MissionUtils, Random } from "@woowacourse/mission-utils";
 import { InputView, OutputView } from "./view.js";
 import Lotto from "./domain/Lotto.js";
-import { LOTTO_CONFIG, ERROR_MESSAGE } from "./constants.js";
+import LotteryShop from "./domain/LotteryShop.js";
+import { LOTTO_CONFIG, ERROR_MESSAGE, LOTTERY_TYPES } from "./constants.js";
 
 class App {
   async run() {
@@ -61,7 +62,90 @@ class App {
   }
 
   async #runShopMode() {
-    MissionUtils.Console.print("복권판매점 모드는 준비 중입니다.");
+    const shop = new LotteryShop("./src/data/lottery_types.csv");
+
+    const lotteryType = await this.#askLotteryType();
+    const info = shop.getLotteryInfo(lotteryType);
+    const price = Number(info.price);
+
+    const amount = await this.#askShopAmount(price);
+    const lotteries = shop.purchaseLotteries(lotteryType, amount);
+
+    this.#printShopLotteries(lotteries);
+
+    if (lotteryType === LOTTERY_TYPES.LOTTO) {
+      const winningNumbers = await this.#askWinningLotto();
+      const bonusNumber = await this.#askBonusNumber(winningNumbers);
+      this.#printShopResult(lotteries, winningNumbers, bonusNumber, info);
+    }
+
+    this.#printSalesStats(shop);
+  }
+
+  async #askLotteryType() {
+    const input = await MissionUtils.Console.readLineAsync(
+      "복권 종류를 선택해주세요.\n1. 행성로또\n2. 연금복권\n"
+    );
+
+    if (input === "1") return LOTTERY_TYPES.LOTTO;
+    if (input === "2") return LOTTERY_TYPES.PENSION;
+
+    MissionUtils.Console.print("잘못된 입력입니다. 다시 선택해주세요.");
+    return this.#askLotteryType();
+  }
+
+  async #askShopAmount(price) {
+    const input = await MissionUtils.Console.readLineAsync(
+      `구입금액을 입력해 주세요. (${price}원 단위)\n`
+    );
+    const amount = parseInt(input, 10);
+
+    if (Number.isNaN(amount) || amount < price || amount % price !== 0) {
+      MissionUtils.Console.print(`${price}원 단위로 입력해주세요.`);
+      return this.#askShopAmount(price);
+    }
+
+    return amount;
+  }
+
+  #printShopLotteries(lotteries) {
+    MissionUtils.Console.print(`${lotteries.length}개를 구매했습니다.`);
+    lotteries.forEach((lottery) => {
+      MissionUtils.Console.print(lottery.toString());
+    });
+  }
+
+  #printShopResult(lotteries, winningNumbers, bonusNumber, info) {
+    const rankCounts = { FIRST: 0, SECOND: 0, THIRD: 0, FOURTH: 0, FIFTH: 0 };
+
+    for (const lottery of lotteries) {
+      const rank = lottery.judgeRank(winningNumbers, bonusNumber);
+      if (rank) rankCounts[rank]++;
+    }
+
+    MissionUtils.Console.print("당첨 통계");
+    MissionUtils.Console.print("---");
+    MissionUtils.Console.print(
+      `1등 (${Number(info.firstPrize).toLocaleString()}원) - ${rankCounts.FIRST}개`
+    );
+    MissionUtils.Console.print(
+      `2등 (${Number(info.secondPrize).toLocaleString()}원) - ${rankCounts.SECOND}개`
+    );
+    MissionUtils.Console.print(
+      `3등 (${Number(info.thirdPrize).toLocaleString()}원) - ${rankCounts.THIRD}개`
+    );
+  }
+
+  #printSalesStats(shop) {
+    const stats = shop.getSalesStats();
+    MissionUtils.Console.print("\n--- 판매 통계 ---");
+    Object.entries(stats).forEach(([type, data]) => {
+      if (data.count > 0) {
+        MissionUtils.Console.print(
+          `${type}: ${data.count}장, ${data.revenue.toLocaleString()}원`
+        );
+      }
+    });
   }
 
   async #askAmount() {
