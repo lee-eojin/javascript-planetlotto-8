@@ -40,10 +40,10 @@ class App {
       throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (amount < LOTTO_CONFIG.PRICE) {
-      throw new Error(`[ERROR] ${LOTTO_CONFIG.PRICE}원 이상 입력해주세요.`);
+      throw new Error(`${LOTTO_CONFIG.PRICE}원 이상 입력해주세요.`);
     }
     if (amount % LOTTO_CONFIG.PRICE !== 0) {
-      throw new Error(`[ERROR] ${LOTTO_CONFIG.PRICE}원 단위로 입력해주세요.`);
+      throw new Error(`${LOTTO_CONFIG.PRICE}원 단위로 입력해주세요.`);
     }
   }
 
@@ -64,7 +64,7 @@ class App {
     }
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
       throw new Error(
-        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`
+        `로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`
       );
     }
     if (new Set(numbers).size !== numbers.length) {
@@ -75,7 +75,7 @@ class App {
     );
     if (!범위확인) {
       throw new Error(
-        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+        `로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
       );
     }
   }
@@ -98,7 +98,7 @@ class App {
     }
     if (number < LOTTO_CONFIG.MIN_NUMBER || number > LOTTO_CONFIG.MAX_NUMBER) {
       throw new Error(
-        `[ERROR] 로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+        `로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
       );
     }
     if (winningNumbers.includes(number)) {
