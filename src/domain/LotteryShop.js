@@ -1,6 +1,11 @@
 import fs from "fs";
 import { Random } from "@woowacourse/mission-utils";
-import { LOTTERY_TYPES, PLUS_ERROR_MESSAGE } from "../constants.js";
+import {
+  LOTTERY_TYPES,
+  PLUS_ERROR_MESSAGE,
+  LOTTO_CONFIG,
+  PENSION_CONFIG,
+} from "../constants.js";
 import LottoLottery from "./LottoLottery.js";
 import PensionLottery from "./PensionLottery.js";
 
@@ -69,12 +74,19 @@ class LotteryShop {
 
   #generateLottery(type) {
     if (type === LOTTERY_TYPES.LOTTO) {
-      const numbers = Random.pickUniqueNumbersInRange(1, 30, 5);
+      const numbers = Random.pickUniqueNumbersInRange(
+        LOTTO_CONFIG.MIN_NUMBER,
+        LOTTO_CONFIG.MAX_NUMBER,
+        LOTTO_CONFIG.NUMBER_COUNT
+      );
       return new LottoLottery(numbers.sort((a, b) => a - b));
     }
 
     if (type === LOTTERY_TYPES.PENSION) {
-      const number = Random.pickNumberInRange(1, 1000000);
+      const number = Random.pickNumberInRange(
+        PENSION_CONFIG.MIN_NUMBER,
+        PENSION_CONFIG.MAX_NUMBER
+      );
       return new PensionLottery(number);
     }
 

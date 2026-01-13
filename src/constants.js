@@ -5,6 +5,20 @@ export const LOTTO_CONFIG = Object.freeze({
   MAX_NUMBER: 30,
 });
 
+export const MODE = Object.freeze({
+  DEFAULT: "1",
+  SHOP: "2",
+});
+
+export const LOTTERY_CHOICE = Object.freeze({
+  LOTTO: "1",
+  PENSION: "2",
+});
+
+export const FILE_PATH = Object.freeze({
+  LOTTERY_CSV: "./src/data/lottery_types.csv",
+});
+
 export const MATCH_COUNT = Object.freeze({
   FIRST: 5,
   SECOND: 4,
@@ -34,6 +48,20 @@ export const LOTTERY_TYPES = Object.freeze({
   LOTTO: "LOTTO",
   PENSION: "PENSION",
   INSTANT: "INSTANT",
+});
+
+export const RANK = Object.freeze({
+  FIRST: "FIRST",
+  SECOND: "SECOND",
+  THIRD: "THIRD",
+  FOURTH: "FOURTH",
+  FIFTH: "FIFTH",
+});
+
+export const PENSION_CONFIG = Object.freeze({
+  MIN_NUMBER: 1,
+  MAX_NUMBER: 1000000,
+  DIGIT_LENGTH: 6,
 });
 
 export const PLUS_ERROR_MESSAGE = Object.freeze({

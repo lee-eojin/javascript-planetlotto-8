@@ -1,5 +1,5 @@
 import Lottery from "./Lottery.js";
-import { LOTTERY_TYPES } from "../constants.js";
+import { LOTTERY_TYPES, MATCH_COUNT, RANK } from "../constants.js";
 
 class LottoLottery extends Lottery {
   constructor(numbers) {
@@ -10,11 +10,11 @@ class LottoLottery extends Lottery {
     const matchCount = this.#countMatches(winningNumbers);
     const hasBonus = this.getNumbers().includes(bonusNumber);
 
-    if (matchCount === 5) return "FIRST";
-    if (matchCount === 4 && hasBonus) return "SECOND";
-    if (matchCount === 4) return "THIRD";
-    if (matchCount === 3 && hasBonus) return "FOURTH";
-    if (matchCount === 2 && hasBonus) return "FIFTH";
+    if (matchCount === MATCH_COUNT.FIRST) return RANK.FIRST;
+    if (matchCount === MATCH_COUNT.SECOND && hasBonus) return RANK.SECOND;
+    if (matchCount === MATCH_COUNT.THIRD) return RANK.THIRD;
+    if (matchCount === MATCH_COUNT.FOURTH && hasBonus) return RANK.FOURTH;
+    if (matchCount === MATCH_COUNT.FIFTH && hasBonus) return RANK.FIFTH;
     return null;
   }
 

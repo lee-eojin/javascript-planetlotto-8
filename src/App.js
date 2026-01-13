@@ -2,13 +2,21 @@ import { MissionUtils, Random } from "@woowacourse/mission-utils";
 import { InputView, OutputView } from "./view.js";
 import Lotto from "./domain/Lotto.js";
 import LotteryShop from "./domain/LotteryShop.js";
-import { LOTTO_CONFIG, ERROR_MESSAGE, LOTTERY_TYPES } from "./constants.js";
+import {
+  LOTTO_CONFIG,
+  ERROR_MESSAGE,
+  LOTTERY_TYPES,
+  MODE,
+  LOTTERY_CHOICE,
+  FILE_PATH,
+  MATCH_COUNT,
+} from "./constants.js";
 
 class App {
   async run() {
     const modeInput = await this.#askMode();
 
-    if (modeInput === "2") {
+    if (modeInput === MODE.SHOP) {
       await this.#runShopMode();
       return;
     }
@@ -43,7 +51,7 @@ class App {
   }
 
   async #getAmountFromModeInput(modeInput) {
-    if (modeInput === "1") {
+    if (modeInput === MODE.DEFAULT) {
       return this.#askAmount();
     }
 
@@ -62,7 +70,7 @@ class App {
   }
 
   async #runShopMode() {
-    const shop = new LotteryShop("./src/data/lottery_types.csv");
+    const shop = new LotteryShop(FILE_PATH.LOTTERY_CSV);
 
     const lotteryType = await this.#askLotteryType();
     const info = shop.getLotteryInfo(lotteryType);
@@ -87,8 +95,8 @@ class App {
       "복권 종류를 선택해주세요.\n1. 행성로또\n2. 연금복권\n"
     );
 
-    if (input === "1") return LOTTERY_TYPES.LOTTO;
-    if (input === "2") return LOTTERY_TYPES.PENSION;
+    if (input === LOTTERY_CHOICE.LOTTO) return LOTTERY_TYPES.LOTTO;
+    if (input === LOTTERY_CHOICE.PENSION) return LOTTERY_TYPES.PENSION;
 
     MissionUtils.Console.print("잘못된 입력입니다. 다시 선택해주세요.");
     return this.#askLotteryType();
@@ -246,11 +254,11 @@ class App {
   }
 
   #rankCalculate(matchCount, hasBonus) {
-    if (matchCount === 5) return 1;
-    if (matchCount === 4 && hasBonus) return 2;
-    if (matchCount === 4) return 3;
-    if (matchCount === 3 && hasBonus) return 4;
-    if (matchCount === 2 && hasBonus) return 5;
+    if (matchCount === MATCH_COUNT.FIRST) return 1;
+    if (matchCount === MATCH_COUNT.SECOND && hasBonus) return 2;
+    if (matchCount === MATCH_COUNT.THIRD) return 3;
+    if (matchCount === MATCH_COUNT.FOURTH && hasBonus) return 4;
+    if (matchCount === MATCH_COUNT.FIFTH && hasBonus) return 5;
     return 0;
   }
 
