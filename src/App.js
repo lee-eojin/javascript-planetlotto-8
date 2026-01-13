@@ -7,8 +7,10 @@ class App {
   async run() {
     const amount = await this.#askAmount();
     const lottoLists = this.#generateLottos(amount);
-    OutputView.printPurchasedLottos(lottoLists.length);
-    lottoLists.forEach((lotto) => OutputView.printLottos(lotto.numberCheck()));
+
+    OutputView.printPurchasedLottos(
+      lottoLists.map((lotto) => lotto.numberCheck())
+    );
 
     const winningNumbers = await this.#askWinningLotto();
     const bonusNumber = await this.#askBonusNumber(winningNumbers);
@@ -47,8 +49,7 @@ class App {
 
   async #askWinningLotto() {
     try {
-      const input = await InputView.askWinningLotto();
-      const numbers = input.replaceAll(" ", "").split(",").map(Number);
+      const numbers = await InputView.askWinningLotto();
       this.#winningNumbersValidate(numbers);
       return numbers;
     } catch (error) {
