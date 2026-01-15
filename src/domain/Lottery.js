@@ -1,4 +1,4 @@
-import { PLUS_ERROR_MESSAGE } from "../constants.js";
+import { ERROR_MESSAGE } from "../constants.js";
 
 class Lottery {
   #numbers;
@@ -18,7 +18,7 @@ class Lottery {
   }
 
   judgeRank() {
-    throw new Error(PLUS_ERROR_MESSAGE.NOT_IMPLEMENTED);
+    throw new Error(ERROR_MESSAGE.NOT_IMPLEMENTED);
   }
 
   toString() {

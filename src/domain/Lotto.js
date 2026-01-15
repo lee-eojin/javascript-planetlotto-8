@@ -1,4 +1,4 @@
-import { LOTTO_CONFIG, PLUS_ERROR_MESSAGE } from "../constants.js";
+import { LOTTO_CONFIG, ERROR_MESSAGE } from "../constants.js";
 
 class Lotto {
   #numbers;
@@ -11,12 +11,12 @@ class Lotto {
   #validate(numbers) {
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
       throw new Error(
-        PLUS_ERROR_MESSAGE.INVALID_LOTTO_COUNT(LOTTO_CONFIG.NUMBER_COUNT)
+        ERROR_MESSAGE.INVALID_LOTTO_COUNT(LOTTO_CONFIG.NUMBER_COUNT)
       );
     }
 
     if (new Set(numbers).size !== numbers.length) {
-      throw new Error(PLUS_ERROR_MESSAGE.DUPLICATE_LOTTO_NUMBER);
+      throw new Error(ERROR_MESSAGE.DUPLICATE_LOTTO_NUMBER);
     }
 
     const isValidRange = numbers.every(
@@ -24,7 +24,7 @@ class Lotto {
     );
     if (!isValidRange) {
       throw new Error(
-        PLUS_ERROR_MESSAGE.INVALID_NUMBER_RANGE(
+        ERROR_MESSAGE.INVALID_NUMBER_RANGE(
           LOTTO_CONFIG.MIN_NUMBER,
           LOTTO_CONFIG.MAX_NUMBER
         )

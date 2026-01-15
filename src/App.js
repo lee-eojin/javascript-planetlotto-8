@@ -10,7 +10,6 @@ import {
   LOTTERY_CHOICE,
   FILE_PATH,
   MATCH_COUNT,
-  PLUS_ERROR_MESSAGE,
   PROMPT_MESSAGE,
   OUTPUT_MESSAGE,
 } from "./constants.js";
@@ -101,7 +100,7 @@ class App {
     if (input === LOTTERY_CHOICE.LOTTO) return LOTTERY_TYPES.LOTTO;
     if (input === LOTTERY_CHOICE.PENSION) return LOTTERY_TYPES.PENSION;
 
-    MissionUtils.Console.print(PLUS_ERROR_MESSAGE.INVALID_INPUT);
+    MissionUtils.Console.print(ERROR_MESSAGE.INVALID_INPUT);
     return this.#askLotteryType();
   }
 
@@ -112,7 +111,7 @@ class App {
     const amount = parseInt(input, 10);
 
     if (Number.isNaN(amount) || amount < price || amount % price !== 0) {
-      MissionUtils.Console.print(PLUS_ERROR_MESSAGE.INVALID_AMOUNT_UNIT(price));
+      MissionUtils.Console.print(ERROR_MESSAGE.INVALID_AMOUNT_UNIT(price));
       return this.#askShopAmount(price);
     }
 
@@ -175,10 +174,10 @@ class App {
       throw new Error(ERROR_MESSAGE.INVALID_NUMBER_FORMAT);
     }
     if (amount < LOTTO_CONFIG.PRICE) {
-      throw new Error(PLUS_ERROR_MESSAGE.INVALID_AMOUNT_MIN(LOTTO_CONFIG.PRICE));
+      throw new Error(ERROR_MESSAGE.INVALID_AMOUNT_MIN(LOTTO_CONFIG.PRICE));
     }
     if (amount % LOTTO_CONFIG.PRICE !== 0) {
-      throw new Error(PLUS_ERROR_MESSAGE.INVALID_AMOUNT_UNIT(LOTTO_CONFIG.PRICE));
+      throw new Error(ERROR_MESSAGE.INVALID_AMOUNT_UNIT(LOTTO_CONFIG.PRICE));
     }
   }
 
@@ -199,7 +198,7 @@ class App {
     }
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
       throw new Error(
-        PLUS_ERROR_MESSAGE.INVALID_LOTTO_COUNT(LOTTO_CONFIG.NUMBER_COUNT)
+        ERROR_MESSAGE.INVALID_LOTTO_COUNT(LOTTO_CONFIG.NUMBER_COUNT)
       );
     }
     if (new Set(numbers).size !== numbers.length) {
@@ -210,7 +209,7 @@ class App {
     );
     if (!isValidRange) {
       throw new Error(
-        PLUS_ERROR_MESSAGE.INVALID_NUMBER_RANGE(
+        ERROR_MESSAGE.INVALID_NUMBER_RANGE(
           LOTTO_CONFIG.MIN_NUMBER,
           LOTTO_CONFIG.MAX_NUMBER
         )
@@ -235,7 +234,7 @@ class App {
     }
     if (number < LOTTO_CONFIG.MIN_NUMBER || number > LOTTO_CONFIG.MAX_NUMBER) {
       throw new Error(
-        PLUS_ERROR_MESSAGE.INVALID_NUMBER_RANGE(
+        ERROR_MESSAGE.INVALID_NUMBER_RANGE(
           LOTTO_CONFIG.MIN_NUMBER,
           LOTTO_CONFIG.MAX_NUMBER
         )

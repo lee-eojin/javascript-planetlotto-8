@@ -2,7 +2,7 @@ import fs from "fs";
 import { Random } from "@woowacourse/mission-utils";
 import {
   LOTTERY_TYPES,
-  PLUS_ERROR_MESSAGE,
+  ERROR_MESSAGE,
   LOTTO_CONFIG,
   PENSION_CONFIG,
 } from "../constants.js";
@@ -54,7 +54,7 @@ class LotteryShop {
     const count = amount / price;
 
     if (Number(info.stock) < count) {
-      throw new Error(PLUS_ERROR_MESSAGE.SHORTAGE);
+      throw new Error(ERROR_MESSAGE.SHORTAGE);
     }
 
     const lotteries = [];
@@ -90,7 +90,7 @@ class LotteryShop {
       return new PensionLottery(number);
     }
 
-    throw new Error(PLUS_ERROR_MESSAGE.TYPE);
+    throw new Error(ERROR_MESSAGE.UNKNOWN_TYPE);
   }
 
   getPurchasedLotteries(type) {
