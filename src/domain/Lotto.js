@@ -1,4 +1,4 @@
-import { LOTTO_CONFIG } from "../constants.js";
+import { LOTTO_CONFIG, PLUS_ERROR_MESSAGE } from "../constants.js";
 
 class Lotto {
   #numbers;
@@ -11,20 +11,23 @@ class Lotto {
   #validate(numbers) {
     if (numbers.length !== LOTTO_CONFIG.NUMBER_COUNT) {
       throw new Error(
-        `로또 번호는 ${LOTTO_CONFIG.NUMBER_COUNT}개여야 합니다.`
+        PLUS_ERROR_MESSAGE.INVALID_LOTTO_COUNT(LOTTO_CONFIG.NUMBER_COUNT)
       );
     }
 
     if (new Set(numbers).size !== numbers.length) {
-      throw new Error("로또 번호는 중복될 수 없습니다.");
+      throw new Error(PLUS_ERROR_MESSAGE.DUPLICATE_LOTTO_NUMBER);
     }
 
-    const scopeCheck = numbers.every(
+    const isValidRange = numbers.every(
       (num) => num >= LOTTO_CONFIG.MIN_NUMBER && num <= LOTTO_CONFIG.MAX_NUMBER
     );
-    if (!scopeCheck) {
+    if (!isValidRange) {
       throw new Error(
-        `로또 번호는 ${LOTTO_CONFIG.MIN_NUMBER}부터 ${LOTTO_CONFIG.MAX_NUMBER} 사이의 숫자여야 합니다.`
+        PLUS_ERROR_MESSAGE.INVALID_NUMBER_RANGE(
+          LOTTO_CONFIG.MIN_NUMBER,
+          LOTTO_CONFIG.MAX_NUMBER
+        )
       );
     }
   }

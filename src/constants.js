@@ -73,6 +73,8 @@ export const PLUS_ERROR_MESSAGE = Object.freeze({
   INVALID_LOTTO_COUNT: (count) => `로또 번호는 ${count}개여야 합니다.`,
   INVALID_NUMBER_RANGE: (min, max) =>
     `로또 번호는 ${min}부터 ${max} 사이의 숫자여야 합니다.`,
+  DUPLICATE_LOTTO_NUMBER: "로또 번호는 중복될 수 없습니다.",
+  NOT_IMPLEMENTED: "하위 클래스에서 구현해야 합니다.",
 });
 
 export const PROMPT_MESSAGE = Object.freeze({

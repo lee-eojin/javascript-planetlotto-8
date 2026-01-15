@@ -1,3 +1,5 @@
+import { PLUS_ERROR_MESSAGE } from "../constants.js";
+
 class Lottery {
   #numbers;
   #type;
@@ -16,7 +18,7 @@ class Lottery {
   }
 
   judgeRank() {
-    throw new Error("하위 클래스에서 구현해야 합니다.");
+    throw new Error(PLUS_ERROR_MESSAGE.NOT_IMPLEMENTED);
   }
 
   toString() {
